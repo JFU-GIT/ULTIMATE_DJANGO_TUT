@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -26,19 +27,27 @@ def get_env_variable(var_name):
 
 # Get ENV VARIABLES key
 ENV_ROLE = get_env_variable('ENV_ROLE')
+print("ENV_ROLE=", ENV_ROLE)
+
 
 #SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
+CRMEASY_DB_PASS = False
+
 if ENV_ROLE == 'development':
     DEBUG = True
     TEMPLATE_DEBUG = DEBUG
-    
+    CRMEASY_DB_PASS = get_env_variable('CRMEASY_DB_PASS')
+
+print("CRMEASY_DB_PASS=", CRMEASY_DB_PASS)
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'mqw1k48&e--roxhy2m6h=j2d=bqmgqkegv60&t$i$k#=$qnkcy'
+SECRET_KEY = get_env_variable('SECRET_KEY')
+print("SECRET_KEY=", SECRET_KEY)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -100,7 +109,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'ultimate_django',
         'USER': 'root',
-        'PASSWORD': 'root',
+        'PASSWORD': CRMEASY_DB_PASS,
         'HOST': 'localhost',
         'PORT': '',
     }
@@ -144,3 +153,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),)
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
+MEDIA_URL = '/media/'
