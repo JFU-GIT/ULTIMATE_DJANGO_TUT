@@ -15,8 +15,13 @@ from django.core.exceptions import ImproperlyConfigured
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+PROJ_ROOT_DIR = os.path.join(BASE_DIR, 'crmapp')
+print("BASE_DIR", BASE_DIR)
+print("PROJ ROOT DIR=", PROJ_ROOT_DIR)
 
 # Handling Key Import Errors
+
+
 def get_env_variable(var_name):
     """ Get the environment variable or return exception """
     try:
@@ -25,12 +30,13 @@ def get_env_variable(var_name):
         error_msg = "Set the %s environment variable" % var_name
         raise ImproperlyConfigured(error_msg)
 
+
 # Get ENV VARIABLES key
 ENV_ROLE = get_env_variable('ENV_ROLE')
 print("ENV_ROLE=", ENV_ROLE)
 
 
-#SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 CRMEASY_DB_PASS = False
@@ -64,6 +70,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'crmapp.marketing',
 ]
 
 MIDDLEWARE = [
@@ -153,7 +160,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'assets'),)
+STATICFILES_DIRS = (
+    os.path.join(BASE_DIR, 'assets'),
+    os.path.join(PROJ_ROOT_DIR, 'static'),
+)
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'uploads')
 MEDIA_URL = '/media/'
